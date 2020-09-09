@@ -1,0 +1,33 @@
+// What is Changed in this version (1.4.4)
+//
+// Code-fixup, removed old unused code.
+// You can now put color in all your language file messages.
+//
+// Added better support for Single-MySQL database support in your Minecraft Server-Network
+// But still not perfect (to prevent serverlag on MySQL queries), working on that.
+//
+// New-Features:
+// added OnRgstr event (Join-Event when new Player has to Register his PlayerName).
+// added OnGrace event (Join-Event when Player was logged in before: Grace login/No password).
+//
+// Every event console command excution can now be delayed by a number of game-ticks
+// To delay a command start the command-line with the parameter: AmkWait(NumberOfTicks),
+// Where NumberOfTicks is the number of game ticks to wait before running the command.
+// The parameter has to be "AmkWait(..)" otherwise AmkMcAuth will run this command without waiting.
+// If you wait to long the player might be logged off resulting in a message like: "No player was found".  
+//
+// added Hidden-Login, so the login command is not showing up in the Console/Logs, hiding the password.
+// if player logs in with different UserId-case letters player will be kicked showing the players real/registerd Userid.
+// server administrators have to update the languagefile entry "PLAYER_REGISTERED_OTHERCASE:" adding ", registered as: %1$s" at the end 
+// so it something like : "PLAYER_REGISTERED_OTHERCASE: same playername is registered using different Character-Case!, registered as: %1$s"
+//
+// Bug-Fix: 
+//
+// Fix on IP-Address with a length more then 20 characters crashing the plugin (seen on Paper server).
+// Fix on Updating Counter-Email and Ip-Adress, Random-File-pointer was located wrongly. 
+//
+// ToDo:
+// adding bStats Server build (Spigot Paper eg.)
+// adding clear player inventory on Join when not logged in and restore on Login and/or leave
+// adding option to prevent player "pushing" when "teleport_to_spawn: true: is used. But Hiding not logged-in Players works! 
+//        hint to use: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/LivingEntity.html#setCollidable-boolean-
