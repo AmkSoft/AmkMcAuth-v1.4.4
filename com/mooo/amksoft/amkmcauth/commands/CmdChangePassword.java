@@ -60,7 +60,7 @@ public class CmdChangePassword implements CommandExecutor {
   	}
 
 
-    public static boolean CmdChgMyPswd(CommandSender cs, String cmd, String args)//when changes issued by command??
+    public static boolean CmdChgMyPswd(CommandSender cs, String cmd, String args)
     {
         //getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize("CmdChgMyPswd ISSUED!!"));//d
         //getConsoleSender().sendMessage(ChatColor.RED + AmkAUtils.colorize(args));//d
