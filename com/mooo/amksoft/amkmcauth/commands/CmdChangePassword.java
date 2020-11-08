@@ -15,17 +15,24 @@ import com.mooo.amksoft.amkmcauth.AmkMcAuth;
 
 import java.security.NoSuchAlgorithmException;
 
+//import static org.bukkit.Bukkit.getConsoleSender;//d, THIS AND other 'd' lines are things I added for debug, feel free to delete
+
 public class CmdChangePassword implements CommandExecutor {
 
     @SuppressWarnings("unused") // Despite "unused": IT IS NEEDED in then onEnable Event !!!!!
 	private final AmkMcAuth plugin;
-
     public CmdChangePassword(AmkMcAuth instance) {
         this.plugin = instance;
     }
 
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args)
     {
+//        getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize("onCommand ISSUED!!"));//d
+//        for (String aaa : args)
+//        {
+//            getConsoleSender().sendMessage(ChatColor.RED + AmkAUtils.colorize(aaa));//d
+//        }
+
         if (args.length < 2) {
         	//cs.sendMessage(cmd.getDescription());
         	cs.sendMessage(String.format(Language.USAGE_CHANGEPAS2.toString(), new Object[] { cmd }));
@@ -33,15 +40,36 @@ public class CmdChangePassword implements CommandExecutor {
         	
             return false;
         }
-  		String oldPassword = AmkAUtils.getFinalArg(args, 0).trim(); // support spaces
-        String newPassword = AmkAUtils.getFinalArg(args, 1).trim();
+
+        //MDFM28: This wrong(?!), trim at 0 is same as not trimming at all
+        //this return: "oldpassword newpassword" and "newpassword
+        //Use split??
+        //Maybe not necessary, The 'args' itself is an arrat which consist of oldpassword argument and newpassword argument
+        //OLD:
+  	//String oldPassword = AmkAUtils.getFinalArg(args, 0).trim(); // support spaces
+        //String newPassword = AmkAUtils.getFinalArg(args, 1).trim();
+        //NEW:
+        String oldPassword = args[0]; //read directly to args[]
+        String newPassword = args[1];
+        //OK!
+
+        //getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize(oldPassword));//d
+        //getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize(newPassword));//d
+
   		return ChgMyPswd((Player) cs, cmd.getName(), oldPassword, newPassword);
   	}
 
 
-    public static boolean CmdChgMyPswd(CommandSender cs, String cmd, String args)
+    public static boolean CmdChgMyPswd(CommandSender cs, String cmd, String args)//when changes issued by command??
     {
+        //getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize("CmdChgMyPswd ISSUED!!"));//d
+        //getConsoleSender().sendMessage(ChatColor.RED + AmkAUtils.colorize(args));//d
+
         String [] passwords = args.split(",") ;
+        //for (String aaa : passwords)
+        //{
+        //    getConsoleSender().sendMessage(ChatColor.YELLOW + AmkAUtils.colorize(aaa));//d
+        //}
         //String newPassword = args[1];
 
     	//if (oldPassword.trim()=="" || newPassword.trim()=="")
@@ -57,6 +85,8 @@ public class CmdChangePassword implements CommandExecutor {
     }
     
     private static boolean ChgMyPswd(Player cs, String cmd, String oldRawPassword, String newRawPassword) {
+        //getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize("ChgMyPswd ISSUED!!"));
+
         if (cmd.equalsIgnoreCase("changepassword")) {
             if (!cs.hasPermission("amkauth.changepassword")) {
                 AmkAUtils.dispNoPerms(cs);
@@ -87,6 +117,11 @@ public class CmdChangePassword implements CommandExecutor {
                 cs.sendMessage(ChatColor.RED + AmkAUtils.colorize(Language.YOUR_PASSWORD_COULD_NOT_BE_CHANGED.toString()));
                 return true;
             }
+            //getConsoleSender().sendMessage(ChatColor.RED + AmkAUtils.colorize(oldRawPassword));//d
+            //getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize(oldPassword));//d
+            //getConsoleSender().sendMessage(ChatColor.RED + AmkAUtils.colorize(newRawPassword));//d
+            //getConsoleSender().sendMessage(ChatColor.BLUE + AmkAUtils.colorize(newPassword));//d
+
             if (!ap.getPasswordHash().equals(oldPassword)) {
                 cs.sendMessage(ChatColor.RED + AmkAUtils.colorize(Language.OLD_PASSWORD_INCORRECT.toString()));
                 return true;
