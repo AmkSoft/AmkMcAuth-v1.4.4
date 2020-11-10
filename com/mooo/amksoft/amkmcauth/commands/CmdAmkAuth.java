@@ -30,7 +30,7 @@ public class CmdAmkAuth implements CommandExecutor {
 
     private final AmkMcAuth plugin;
     public static File dataFolder; // DirectoryNaam of  DataDirectory
-    
+
     private boolean DebugEmail = false; 
 
     public CmdAmkAuth(AmkMcAuth instance) {
@@ -86,6 +86,7 @@ public class CmdAmkAuth implements CommandExecutor {
                     cs.sendMessage(ChatColor.GRAY + "  /" + label + " reload" + ChatColor.BLUE + " - " + AmkAUtils.colorize(Language.HELP_RELOAD.toString()));   
                     cs.sendMessage(ChatColor.GRAY + "  /" + label + " debug" + ChatColor.BLUE + " - Debug commands, use with caution!!!");   
                     cs.sendMessage(ChatColor.GRAY + "  /" + label + " help" + ChatColor.BLUE + " - " + AmkAUtils.colorize(Language.HELP_HELP.toString()));
+
                     break;
             	}
                 case "changepassword": {
@@ -770,5 +771,9 @@ public class CmdAmkAuth implements CommandExecutor {
         		}
 			}
     	}).start();
+    }
+
+    public static void emeDebugPrint (String edp) {
+        System.out.println("[EDP-Amk]" + edp);
     }
 }
