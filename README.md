@@ -4,4 +4,4 @@ this is an attempt to fix some problems that I occurs in the master. might not b
 
 Issue Fixed:
 - changepass/changepassword
-- Set Password SQL entry
+- Set Password SQL
