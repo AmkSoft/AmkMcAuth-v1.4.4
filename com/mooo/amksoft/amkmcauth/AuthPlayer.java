@@ -3,6 +3,7 @@ package com.mooo.amksoft.amkmcauth;
 import java.net.InetSocketAddress;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -545,18 +546,48 @@ public class AuthPlayer {
         this.pcm.set("login.password", newPasswordHash);
         this.pcm.set("login.hash", hashType);
 
-        if(!Config.MySqlDbHost.equals("")) { // MySQL heeft voorrang !!)
+        if(!Config.MySqlDbHost.equals("")) { // MySQL heeft voorrang !!) //mdfm
         	PreparedStatement ps;
-        	try {  
-        		ps = MySQL.getConnection().prepareStatement(
-        				"UPDATE Players         " + 
-        						"SET    Password  = ? , " + 
-        						"       Hash      = ?   " + 
-        						"WHERE  Name      = ?   "
-        				);	       		    				
-        		ps.setString(  1, newPasswordHash);
-        		ps.setString(  2, hashType);
-        		ps.setString(  3, this.getUserName());	       								
+        	try {
+                String ppuid = this.getUniqueId().toString();
+
+                //CHECK IF UUID NOT EXIST START - METHODS COPIED FROM AMKMCAUTH
+                int RecAanwezig=0;
+                ps = MySQL.getConnection().prepareStatement(
+                        "SELECT count(*) as Aanwezig " +
+                                "FROM Players " +
+                                "WHERE UUID = ?"
+                );
+                ps.setString(1, ppuid);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next() == true) {
+                    RecAanwezig=rs.getInt("Aanwezig");
+                }
+                ps.close();
+                rs.close();
+
+                if(RecAanwezig==0) {
+                    ps = MySQL.getConnection().prepareStatement(
+                            "INSERT IGNORE INTO Players " +
+                                    "(Password, Hash, Name, UUID) " +
+                                    "VALUES ( ? , ? , ? , ?)"
+                    );
+
+                }else{
+                    ps = MySQL.getConnection().prepareStatement(
+                            "UPDATE Players         " +
+                                    "SET    Password  = ? , " +
+                                    "       Hash      = ? , " +
+                                    "       Name      = ?   " +
+                                    "WHERE  UUID      = ?   "
+                    );
+                }
+
+                ps.setString(  1, newPasswordHash);
+                ps.setString(  2, hashType);
+                ps.setString(  3, this.getUserName());
+                ps.setString(  4, ppuid);
+
         		ps.executeUpdate();							
         		ps.close();
         	} catch (SQLException e1) {
@@ -582,8 +613,7 @@ public class AuthPlayer {
             e.printStackTrace();
             return false;
         }
-        this.pcm.set("login.password", rawPassword);
-        this.pcm.set("login.hash", hashType);
+        setHashedPassword(rawPassword, hashType);
         return true;
     }
 

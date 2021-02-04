@@ -1,5 +1,6 @@
 package com.mooo.amksoft.amkmcauth;
 
+import com.mooo.amksoft.amkmcauth.commands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -59,12 +60,6 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.mooo.amksoft.amkmcauth.commands.CmdChangePassword;
-import com.mooo.amksoft.amkmcauth.commands.CmdLogin;
-import com.mooo.amksoft.amkmcauth.commands.CmdLogout;
-import com.mooo.amksoft.amkmcauth.commands.CmdRegister;
-import com.mooo.amksoft.amkmcauth.commands.CmdSetEmail;
-
 public class AuthListener implements Listener {
 
     private final AmkMcAuth plugin;
@@ -114,10 +109,14 @@ public class AuthListener implements Listener {
 			ap.setJoinLocation(p.getLocation());
 		}
        
-    	if(!ap.isRegistered()){    		
+    	if(!ap.isRegistered()){
     		ap.setUserName(p.getName()); // So the PConfManager knows his PlayerName while removing..
-    		String RealName = PConfManager.doesPlayerExist(p.getName().toLowerCase());
-    		if(!RealName.equals(p.getName())) {
+            CmdAmkAuth.emeDebugPrint("doesPlayerExist for" + p.getName() + " ISSUED!!!");
+            ////Since there was player existed Yet in file. It returns back the argument. WHICH IS LOWER CASED BY AL!!!!
+    		//String RealName = PConfManager.doesPlayerExist(p.getName().toLowerCase()); //!! ISSUE, SOMEHOW ALWAYS RETURN LOWER-CASE PROBLEM WHEN USER HAVE UPPER CASE, check "doesPlayerExist"
+            ////
+            String RealName = PConfManager.doesPlayerExist(p.getName()); ////doesn't needed to toLowerCase!! its already converted properly in conf manager!
+            if(!RealName.equals(p.getName())) {
                 String StrOut = String.format(AmkAUtils.colorize(Language.PLAYER_REGISTERED_OTHERCASE.toString()), RealName);    			
         		this.plugin.getLogger().info(p.getName() + ": "+ StrOut);
         		//p.kickPlayer(Language.PLAYER_ALREADY_REGISTERED.toString());
